@@ -13,14 +13,15 @@ import (
 )
 
 type FuzzyState struct {
-	cstate *_Ctype_struct_fuzzy_state
+	cstate *
+	C.struct_fuzzy_state
 }
 
 /*
 Construct a fuzzy_state object and return it.
 */
 func New() (*FuzzyState, error) {
-	var cstate *_Ctype_struct_fuzzy_state
+	var cstate *C.struct_fuzzy_state
 	if cstate = C.fuzzy_new(); cstate == nil {
 		return nil, errors.New("")
 	}
@@ -31,7 +32,7 @@ func New() (*FuzzyState, error) {
 Create a copy of a fuzzy_state object and return it.
 */
 func (fs *FuzzyState) Clone() (*FuzzyState, error) {
-	var cstate *_Ctype_struct_fuzzy_state
+	var cstate *C.struct_fuzzy_state
 	if cstate = C.fuzzy_clone(fs.cstate); cstate == nil {
 		return nil, errors.New("")
 	}
