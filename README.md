@@ -10,7 +10,10 @@ Go version of ssdeep [http://ssdeep.sourceforge.net/].
 [2]: https://travis-ci.org/dutchcoders/gossdeep
 
 ## Installation
+Installation requires specific `CGO_LDFLAGS_ALLOW` be set before both `go get` and compilation.
+
 ```
+export CGO_LDFLAGS_ALLOW="^-[Il].*$"
 go get github.com/dutchcoders/gossdeep
 
 // use in your .go code

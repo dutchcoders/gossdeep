@@ -1,7 +1,7 @@
 package ssdeep
 
 /*
-#cgo linux LDFLAGS:-L/usr/local/lib/ -lfuzzy -ldl -I/usr/local/include/
+#cgo !windows LDFLAGS:-L/usr/local/lib/ -lfuzzy -ldl -I/usr/local/include/
 #include <stdlib.h>
 #include <fuzzy.h>
 */
@@ -13,8 +13,7 @@ import (
 )
 
 type FuzzyState struct {
-	cstate *
-	C.struct_fuzzy_state
+	cstate *C.struct_fuzzy_state
 }
 
 /*
@@ -121,6 +120,18 @@ func HashFilename(filename string) (string, error) {
 	defer C.free(unsafe.Pointer(cf))
 
 	if C.fuzzy_hash_filename(cf, buf) != 0 {
+		return "", errors.New("")
+	}
+
+	return C.GoString(buf), nil
+}
+
+func HashBytes(b []byte) (string, error) {
+	buf := (*C.char)(C.calloc(C.FUZZY_MAX_RESULT, 1))
+	defer C.free(unsafe.Pointer(buf))
+	length := C.uint32_t(len(b))
+
+	if C.fuzzy_hash_buf((*C.uchar)(unsafe.Pointer(&b[0])), length, buf) != 0 {
 		return "", errors.New("")
 	}
 
